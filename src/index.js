@@ -1,5 +1,5 @@
 const express = require(`express`)
-
+const fs = require('fs');
 const app = express()
 app.use(express.json())
 app.use(express.text())
@@ -131,5 +131,20 @@ app.delete('/posts/:id', (req, res) => {
     
     res.end();
 });
+
+app.get("/readafile", (req, res)=> {
+    fs.readFile('logs.txt', 'utf8', (err, data) => {
+        if(err) {
+            res.json({
+                err
+            });
+            res.end();
+        }
+        res.json({
+            fileData: data
+        })
+        res.end();
+    })
+})
 
 app.listen(3000, () => {console.log("APi is working on port 3000")})
