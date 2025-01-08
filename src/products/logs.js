@@ -1,5 +1,6 @@
 const express = require('express');
 const fs = require('fs');
+const { readJsonFile } = require('../helper/helper');
 const app = express();
 app.use(express.json());
 
@@ -43,29 +44,32 @@ app.delete('/txt/delete', (req, res) => {
 });
 
 // JSON
-
-const readJsonFile = (filePath) => {
-    return new Promise((resolve, reject) => {
-        fs.readFile(filePath, 'utf8', (err, data) => {
-            if (err) {
-                reject(err);
-            } else {
-                resolve(JSON.parse(data));
-            }
-        });
-    });
-};
-
+// to create a new database inside JSON
 app.post('/json/create', async (req, res) => {
-    const newData = req.body;
     try {
-        let data = await readJsonFile('data.json');
+        // const data = await readJsonFile('data.json');
+        const newData = req.body;
+        fs.writeFile('data.json', JSON.stringify(newData, null, 2), (err) => {
+            if (err) {
+                return res.status(500).json({ err });
+            }
+            res.status(201).json({ message: 'Added data succesfully' });
+        });
+    } catch (err) {
+        res.status(500).json({ err });
+    }
+});
+
+app.post('/json/addatlast', async (req, res) => {
+    try {
+        const data = await readJsonFile('data.json');
+        const newData = req.body;
         data.push(newData);
         fs.writeFile('data.json', JSON.stringify(data, null, 2), (err) => {
             if (err) {
                 return res.status(500).json({ err });
             }
-            res.status(201).json({ message: 'Added data succesfully' });
+            res.status(201).json({ message: 'Added at last data succesfully' });
         });
     } catch (err) {
         res.status(500).json({ err });
@@ -88,7 +92,7 @@ app.put('/json/update/:id', async (req, res) => {
         let data = await readJsonFile('data.json');
         let index = data.findIndex(item => item.id == id);
         if (index !== -1) {
-            data[index] = updatedData;
+            data[index] = {...updatedData, id};
             fs.writeFile('data.json', JSON.stringify(data, null, 2), (err) => {
                 if (err) {
                     return res.status(500).json({ err });
