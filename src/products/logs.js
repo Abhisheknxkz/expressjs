@@ -1,19 +1,45 @@
-const fs =  require("fs")
+const express = require('express');
+const fs = require('fs');
+const app = express();
+app.use(express.json());
 
-// fs.writeFile('log.txt', "logs saved here", (err) => {
-//     if (err){
-//         throw err;
-//     }
+app.post('/txt/create', (req, res) => {
+    const data = req.body.data;
+    fs.writeFile('data.txt', data, (err) => {
+        if (err) {
+            return res.status(500).json({ err });
+        }
+        res.status(201).json({ message: 'File created succesfully' });
+    });
+});
 
-//     console.log('file created succesfully');
+app.get('/txt/read', (req, res) => {
+    fs.readFile('data.txt', 'utf8', (err, data) => {
+        if (err) {
+            return res.status(500).json({ err });
+        }
+        res.json({ fileData: data });
+    });
+});
 
-// });
+app.put('/txt/update', (req, res) => {
+    const newData = req.body.data;
+    fs.writeFile('data.txt', newData, (err) => {
+        if (err) {
+            return res.status(500).json({ err });
+        }
+        res.json({ message: 'File updated' });
+    });
+});
 
-fs.readFile('log.txt', 'utf8' ,(err, data) => {
-    if (err){
-        throw err;
-    }
-        
-    console.log('file read succesfully', data);
-        
-})
+app.delete('/txt/delete', (req, res) => {
+    fs.unlink('data.txt', (err) => {
+        if (err) {
+            return res.status(500).json({ err });
+        }
+        res.json({ message: 'Deleted the file' });
+    });
+});
+
+
+app.listen(3000, () => {console.log("APi is working on port 3000")})
