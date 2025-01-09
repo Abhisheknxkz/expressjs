@@ -1,6 +1,7 @@
 const express = require(`express`)
 const fs = require('fs');
-const app = express()
+const app = express();
+const indexRouter = require("./routers"); 
 app.use(express.json())
 app.use(express.text())
 
@@ -114,5 +115,7 @@ app.get("/readafile", (req, res)=> {
         res.end();
     })
 })
+
+app.use("/api", indexRouter);
 
 app.listen(3000, () => {console.log("APi is working on port 3000")})

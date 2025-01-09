@@ -13,6 +13,11 @@ const message = {
     password: 'psswrd098'
 }
 
+const getAPIOpenSecurity = (req, res) => {
+    res.status(200).json(message);
+    // res.status(200).end('Route /api/security/home ends here');
+}
+
 app.get('/api/security', (req, res) => {
     res.status(200).json(message);
     // res.status(200).end('Route /api/security/home ends here');
@@ -37,3 +42,8 @@ app.get('/daniella-account-access', validateToken, (req, res) => {
 app.listen(4000, ()=> {
     console.log('listening on port 4000');
 })
+
+
+module.exports = {
+    getAPIOpenSecurity
+}
