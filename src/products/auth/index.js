@@ -3,6 +3,8 @@ const express = require('express');
 const { validateToken } = require('./helper');
 const app = express();
 
+app.use(express.json())
+
 const message = {
     text: 'Hi! How are you ?',
     token: 'sxncdjakfbw3hr8923ewjdfnosjkflb3uweklaDH32l'
@@ -33,6 +35,33 @@ app.get('/daniella-account-access', validateToken, (req, res) => {
         }
     })
 })
+
+// Learning I think this is a best way 
+const SECRET_KEY = 'my_secret_key';
+
+const users = [
+    { 
+        id: 1, 
+        username: 'testuser', 
+        password: 'testpassword' 
+    } 
+];
+
+app.post('/signin', (req, res) => {
+    const { username, password } = req.body;
+    const user = users.find(u => u.username === username);
+
+    if (!user || user.password !== password) {
+        return res.status(403).send('user or pass is wrong');
+    }
+
+    const token = jwt.sign({ id: user.id, username: user.username }, SECRET_KEY, { expiresIn: '1h' });
+    res.json({ token });
+});
+
+app.get('/protected', validateToken, (req, res) => {
+    res.send('protected message');
+});
 
 app.listen(4000, ()=> {
     console.log('listening on port 4000');
