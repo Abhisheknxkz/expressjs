@@ -13,9 +13,9 @@ const message = {
     password: 'psswrd098'
 }
 
-app.get('/api/security/home', (req, res) => {
-    res.json(message);
-    res.end('Route /api/security/home ends here');
+app.get('/api/security', (req, res) => {
+    res.status(200).json(message);
+    // res.status(200).end('Route /api/security/home ends here');
 });
 
 app.post('/api/security/tokens', (req, res) => {
