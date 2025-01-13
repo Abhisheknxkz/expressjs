@@ -3,6 +3,7 @@ const { products } = require("./src");
 
 const server = async () => {
     const app = express();
+    app.use(express.json());
     await products(app);
 
     console.log("server")

@@ -10,7 +10,7 @@ module.exports = (app) => {
 
     app.post('/add-product', async (req, res) => {
         const body = req.body;
-
+        console.log(req.body);
         const response = await createEntry(body);
         res.json(response);
     });

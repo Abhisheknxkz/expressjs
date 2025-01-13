@@ -4,7 +4,7 @@
   "description": "Expreejs E-commerce",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon src/index"
+    "dev": "nodemon server"
   },
   "keywords": [],
   "author": "",

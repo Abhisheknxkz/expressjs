@@ -11,8 +11,8 @@ async function getEntriesFromDB() {
 }
 
 async function createEntry(data) {
-    const conection = await productsDB();
     console.log(data);
+    const conection = await productsDB();
     const insertData = await conection.insertOne(data);
     if (insertData.acknowledged)
     {
