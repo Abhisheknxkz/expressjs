@@ -2,6 +2,8 @@ const { Db } = require("mongodb");
 const { DB } = require("../../config");
 const { productsDB } = require("./database");
 
+const Model = require("./schema");
+
 async function getEntriesFromDB() {
     const conection = await productsDB();
     console.log("server");
@@ -13,7 +15,8 @@ async function getEntriesFromDB() {
 async function createEntry(data) {
     console.log(data);
     const conection = await productsDB();
-    const insertData = await conection.insertOne(data);
+    const productEntry = new Model(data);
+    const insertData = await conection.insertOne(productEntry);
     if (insertData.acknowledged)
     {
         return {
